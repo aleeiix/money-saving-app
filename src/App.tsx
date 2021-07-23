@@ -1,10 +1,12 @@
 import * as React from 'react'
+import CssBaseline from '@material-ui/core/CssBaseline'
 
 function App(): React.ReactElement {
 	return (
-		<div className='App'>
+		<>
+			<CssBaseline />
 			<h1>Hola</h1>
-		</div>
+		</>
 	)
 }
 
