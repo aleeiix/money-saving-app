@@ -33,6 +33,7 @@ module.exports = {
   rules: {
     'no-use-before-define': RULES.OFF,
     '@typescript-eslint/no-use-before-define': [RULES.ERROR],
-    'react/react-in-jsx-scope': RULES.OFF
+    'react/react-in-jsx-scope': RULES.OFF,
+    'react/prop-types': RULES.OFF
   }
 }
