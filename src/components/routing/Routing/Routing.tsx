@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { Router, Switch, Route, Redirect } from 'react-router-dom'
 
 import * as Routes from '../../../models/constants/routes'
 
@@ -7,17 +7,19 @@ import Home from '../../../views/Home/Home'
 import Login from '../../../views/Login/Login'
 import Register from '../../../views/Register/Register'
 
-const Router: FC = () => {
+import history from '../../../utils/history'
+
+const Routing: FC = () => {
 	return (
-		<BrowserRouter>
+		<Router history={history}>
 			<Switch>
 				<Redirect path={Routes.ROOT} to={Routes.HOME} exact />
 				<Route path={Routes.LOGIN} component={Login} />
 				<Route path={Routes.REGISTER} component={Register} />
 				<Route path={Routes.HOME} component={Home} />
 			</Switch>
-		</BrowserRouter>
+		</Router>
 	)
 }
 
-export default Router
+export default Routing
