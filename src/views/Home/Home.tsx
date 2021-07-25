@@ -7,9 +7,10 @@ import styled from 'styled-components'
 import { State } from '../../models/interfaces/state'
 import AddMovement from '../../components/dialog/AddMovement/AddMovement'
 import { NewMovementDto } from '../../models/interfaces/movement'
-import { addMovement, getResumeMovements } from '../../store/actionsFactory'
+import { addMovement, getMovementsMonth } from '../../store/actionsFactory'
 import CardMovement from '../../components/movements/CardMovement/CardMovement'
 import PersonIcon from '@material-ui/icons/Person'
+import ResumeMovements from '../../components/movements/ResumeMovements/ResumeMovements'
 
 const FabStyled = styled(Fab)`
 	position: fixed;
@@ -20,13 +21,13 @@ const FabStyled = styled(Fab)`
 const Home: FC = () => {
 	const dispatch = useDispatch()
 	const userLogged = useSelector((state: State) => state.userLogged)
-	const movements = useSelector((state: State) => state.movements)
+	const movements = useSelector((state: State) => state.movementsMonth)
 
 	const [open, setOpen] = useState(false)
 
 	useEffect(() => {
 		if (userLogged?.uid) {
-			dispatch(getResumeMovements(userLogged.uid))
+			dispatch(getMovementsMonth(userLogged.uid))
 		}
 	}, [userLogged])
 
@@ -58,12 +59,25 @@ const Home: FC = () => {
 				</Card>
 			</Box>
 
-			<Box mb={1}>
-				<Typography variant='h6'>Resumen del mes</Typography>
+			<Box mb={4}>
+				<Box mb={1}>
+					<Typography variant='h6'>Resumen del mes</Typography>
+				</Box>
+				<ResumeMovements movements={movements} />
 			</Box>
-			{movements?.map(movement => (
-				<CardMovement key={movement.id} movement={movement} />
-			))}
+
+			<Box>
+				<Box mb={1}>
+					<Typography variant='h6'>Movimientos del mes</Typography>
+				</Box>
+				{movements?.length ? (
+					movements?.map(movement => (
+						<CardMovement key={movement.id} movement={movement} />
+					))
+				) : (
+					<Typography align='center'>Aun no tienes movimientos</Typography>
+				)}
+			</Box>
 
 			<FabStyled color='primary' onClick={handleOpenAddMovement}>
 				<AddIcon></AddIcon>

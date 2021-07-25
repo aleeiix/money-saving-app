@@ -5,7 +5,7 @@ import * as ActionTypes from './actionTypes'
 
 const initialState: State = {
 	userLogged: undefined,
-	movements: undefined,
+	movementsMonth: undefined,
 }
 
 const reducer: Reducer = (state = initialState, action: AnyAction) => {
@@ -14,8 +14,15 @@ const reducer: Reducer = (state = initialState, action: AnyAction) => {
 		case ActionTypes.REGISTER:
 			return { ...state, userLogged: action.payload }
 
-		case ActionTypes.GET_MOVEMENTS:
-			return { ...state, movements: action.payload }
+		case ActionTypes.GET_MOVEMENTS_MONTH:
+			return { ...state, movementsMonth: action.payload }
+
+		case ActionTypes.ADD_MOVEMENT:
+			return {
+				...state,
+				movementsMonth: [action.payload, ...state.movementsMonth],
+			}
+
 		default:
 			return state
 	}

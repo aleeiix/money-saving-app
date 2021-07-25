@@ -3,5 +3,5 @@ import { MovementDto } from './movement'
 
 export interface State {
 	userLogged?: UserDto
-	movements?: MovementDto[]
+	movementsMonth?: MovementDto[]
 }

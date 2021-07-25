@@ -14,6 +14,7 @@ import {
 	Box,
 } from '@material-ui/core'
 import {
+	ExpenseTypeEnum,
 	MovementTypeEnum,
 	NewMovementDto,
 } from '../../../models/interfaces/movement'
@@ -27,6 +28,7 @@ interface Props {
 const AddMovement: FC<Props> = ({ open, handleClose, handleSubmit }) => {
 	const [movement, setMovement] = useState<NewMovementDto>({
 		type: MovementTypeEnum.INCOME,
+		expenseType: undefined,
 		money: 0,
 	})
 
@@ -51,18 +53,34 @@ const AddMovement: FC<Props> = ({ open, handleClose, handleSubmit }) => {
 				<form>
 					<Box>
 						<FormControl variant='outlined' fullWidth>
-							<InputLabel>Tipo</InputLabel>
+							<InputLabel>Tipo de movimiento</InputLabel>
 							<Select
 								name='type'
 								value={movement.type}
 								onChange={handleChange}
-								label='Tipo'
+								label='Tipo de movimiento'
 							>
 								<MenuItem value={MovementTypeEnum.INCOME}>Ingreso</MenuItem>
 								<MenuItem value={MovementTypeEnum.EXPENSE}>Gasto</MenuItem>
 							</Select>
 						</FormControl>
 					</Box>
+					{movement.type === MovementTypeEnum.EXPENSE && (
+						<Box mt={2}>
+							<FormControl variant='outlined' fullWidth>
+								<InputLabel>Tipo de gasto</InputLabel>
+								<Select
+									name='expenseType'
+									value={movement.expenseType || ''}
+									onChange={handleChange}
+									label='Tipo de gasto'
+								>
+									<MenuItem value={ExpenseTypeEnum.PRIMARY}>Primario</MenuItem>
+									<MenuItem value={ExpenseTypeEnum.WHIM}>Capricho</MenuItem>
+								</Select>
+							</FormControl>
+						</Box>
+					)}
 					<Box mt={2}>
 						<FormControl variant='outlined' fullWidth>
 							<InputLabel>Cantidad</InputLabel>
