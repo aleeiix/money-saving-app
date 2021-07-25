@@ -14,4 +14,5 @@ export interface UserDto {
 	uid: string
 	displayName: string
 	email: string
+	firstStepsCompleted: boolean
 }

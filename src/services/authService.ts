@@ -16,12 +16,13 @@ export const login = async (user: LoginDto): Promise<UserDto | undefined> => {
 			.doc(userLogged.user.uid)
 			.get()
 
-		const { displayName, email } = userDoc.data() as UserDto
+		const { displayName, email, firstStepsCompleted } = userDoc.data() as UserDto
 
 		return {
 			uid: userDoc.id,
 			displayName,
 			email,
+			firstStepsCompleted,
 		}
 	}
 }
@@ -38,12 +39,14 @@ export const register = async (
 		await firestore.collection(Collections.USERS).doc(userLogged.user.uid).set({
 			displayName: newUser.displayName,
 			email: newUser.email,
+			firstStepsCompleted: false,
 		})
 
 		return {
 			uid: userLogged?.user?.uid,
 			displayName: newUser.displayName,
 			email: newUser.email,
+			firstStepsCompleted: false,
 		}
 	}
 }
@@ -60,24 +63,27 @@ export const signInWithGoogle = async (): Promise<UserDto | undefined> => {
 		const userGet = await userDoc.get()
 
 		if (userGet.exists) {
-			const { displayName, email } = userGet.data() as UserDto
+			const { displayName, email, firstStepsCompleted } = userGet.data() as UserDto
 
 			return {
 				uid: userGet.id,
 				displayName,
 				email,
+				firstStepsCompleted,
 			}
 		}
 
 		await userDoc.set({
 			displayName: userLogged.user.displayName,
 			email: userLogged.user.email,
+			firstStepsCompleted: false,
 		})
 
 		return {
 			uid: userLogged?.user?.uid,
 			displayName: userLogged.user.displayName || 'Desconocido',
 			email: userLogged.user.email || '',
+			firstStepsCompleted: false,
 		}
 	}
 }

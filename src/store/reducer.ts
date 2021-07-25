@@ -5,6 +5,7 @@ import * as ActionTypes from './actionTypes'
 
 const initialState: State = {
 	userLogged: undefined,
+	movements: undefined,
 }
 
 const reducer: Reducer = (state = initialState, action: AnyAction) => {
@@ -13,6 +14,8 @@ const reducer: Reducer = (state = initialState, action: AnyAction) => {
 		case ActionTypes.REGISTER:
 			return { ...state, userLogged: action.payload }
 
+		case ActionTypes.GET_MOVEMENTS:
+			return { ...state, movements: action.payload }
 		default:
 			return state
 	}
