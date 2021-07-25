@@ -47,10 +47,10 @@ export const addMovement =
 		dispatch({ type: ActionTypes.ADD_MOVEMENT, payload: newMovement })
 	}
 
-export const getMovements =
+export const getResumeMovements =
 	(userUid: string) =>
 	async (dispatch: Dispatch): Promise<void> => {
-		const movements = await MovementService.getMovements(userUid)
+		const movements = await MovementService.getResumeMovements(userUid)
 
 		dispatch({ type: ActionTypes.GET_MOVEMENTS, payload: movements })
 	}

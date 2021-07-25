@@ -24,11 +24,19 @@ export const addMovement = async (
 	}
 }
 
-export const getMovements = async (userUid: string): Promise<MovementDto[]> => {
+export const getResumeMovements = async (
+	userUid: string
+): Promise<MovementDto[]> => {
+	const today = new Date()
+	const firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
+	const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0)
+
 	const movementsDocs = await firestore
 		.collection(Collections.MOVEMENTS)
 		.doc(userUid)
 		.collection(Collections.MOVEMENTS_IMPROVISED)
+		.where('date', '>', firstDay)
+		.where('date', '<', lastDay)
 		.orderBy('date', 'desc')
 		.get()
 

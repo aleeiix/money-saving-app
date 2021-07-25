@@ -7,8 +7,9 @@ import styled from 'styled-components'
 import { State } from '../../models/interfaces/state'
 import AddMovement from '../../components/dialog/AddMovement/AddMovement'
 import { NewMovementDto } from '../../models/interfaces/movement'
-import { addMovement, getMovements } from '../../store/actionsFactory'
+import { addMovement, getResumeMovements } from '../../store/actionsFactory'
 import CardMovement from '../../components/movements/CardMovement/CardMovement'
+import PersonIcon from '@material-ui/icons/Person'
 
 const FabStyled = styled(Fab)`
 	position: fixed;
@@ -25,7 +26,7 @@ const Home: FC = () => {
 
 	useEffect(() => {
 		if (userLogged?.uid) {
-			dispatch(getMovements(userLogged.uid))
+			dispatch(getResumeMovements(userLogged.uid))
 		}
 	}, [userLogged])
 
@@ -48,15 +49,18 @@ const Home: FC = () => {
 		<>
 			<Box display='flex' justifyContent='center' mb={4}>
 				<Card>
-					<CardContent>
+					<Box component={CardContent} display='flex' alignItems='center'>
+						<Box component={PersonIcon} mr={1} style={{ fontSize: 30 }} />
 						<Typography variant='h5'>
 							Hola <strong>{userLogged?.displayName}</strong>
 						</Typography>
-					</CardContent>
+					</Box>
 				</Card>
 			</Box>
 
-			<Typography variant='h6'>Resumen del mes</Typography>
+			<Box mb={1}>
+				<Typography variant='h6'>Resumen del mes</Typography>
+			</Box>
 			{movements?.map(movement => (
 				<CardMovement key={movement.id} movement={movement} />
 			))}
