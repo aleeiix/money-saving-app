@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Router, Switch, Route, Redirect } from 'react-router-dom'
+import { Router, Switch, Redirect } from 'react-router-dom'
 
 import * as Routes from '../../../models/constants/routes'
 
@@ -8,15 +8,32 @@ import Login from '../../../views/Login/Login'
 import Register from '../../../views/Register/Register'
 
 import history from '../../../utils/history'
+import GuardedRoute from '../GuardedRoute/GuardedRoute'
+import { isLogged, isNotLogged } from '../../../services/guards'
 
 const Routing: FC = () => {
 	return (
 		<Router history={history}>
 			<Switch>
 				<Redirect path={Routes.ROOT} to={Routes.HOME} exact />
-				<Route path={Routes.LOGIN} component={Login} />
-				<Route path={Routes.REGISTER} component={Register} />
-				<Route path={Routes.HOME} component={Home} />
+				<GuardedRoute
+					path={Routes.LOGIN}
+					component={Login}
+					redirect={Routes.ROOT}
+					guard={isNotLogged}
+				/>
+				<GuardedRoute
+					path={Routes.REGISTER}
+					component={Register}
+					redirect={Routes.ROOT}
+					guard={isNotLogged}
+				/>
+				<GuardedRoute
+					path={Routes.HOME}
+					component={Home}
+					redirect={Routes.LOGIN}
+					guard={isLogged}
+				/>
 			</Switch>
 		</Router>
 	)

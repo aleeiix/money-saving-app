@@ -4,6 +4,19 @@ import { LoginDto, RegisterDto, UserDto } from '../models/interfaces/auth'
 
 import * as Collections from '../models/constants/collections'
 
+export const getUserById = async (userId: string): Promise<UserDto> => {
+	const userDoc = await firestore.collection(Collections.USERS).doc(userId).get()
+
+	const { displayName, email, firstStepsCompleted } = userDoc.data() as UserDto
+
+	return {
+		uid: userDoc.id,
+		displayName,
+		email,
+		firstStepsCompleted,
+	}
+}
+
 export const login = async (user: LoginDto): Promise<UserDto | undefined> => {
 	const userLogged = await auth.signInWithEmailAndPassword(
 		user.email,
@@ -11,19 +24,7 @@ export const login = async (user: LoginDto): Promise<UserDto | undefined> => {
 	)
 
 	if (userLogged?.user?.uid) {
-		const userDoc = await firestore
-			.collection(Collections.USERS)
-			.doc(userLogged.user.uid)
-			.get()
-
-		const { displayName, email, firstStepsCompleted } = userDoc.data() as UserDto
-
-		return {
-			uid: userDoc.id,
-			displayName,
-			email,
-			firstStepsCompleted,
-		}
+		return getUserById(userLogged.user.uid)
 	}
 }
 
