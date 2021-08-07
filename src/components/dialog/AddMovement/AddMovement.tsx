@@ -12,12 +12,19 @@ import {
 	OutlinedInput,
 	InputAdornment,
 	Box,
+	TextField,
 } from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+
 import {
 	ExpenseTypeEnum,
 	MovementTypeEnum,
 	NewMovementDto,
 } from '../../../models/interfaces/movement'
+import {
+	subtypesIncome,
+	subtypesExpense,
+} from '../../../models/constants/movements'
 
 interface Props {
 	open: boolean
@@ -28,8 +35,9 @@ interface Props {
 const AddMovement: FC<Props> = ({ open, handleClose, handleSubmit }) => {
 	const [movement, setMovement] = useState<NewMovementDto>({
 		type: MovementTypeEnum.INCOME,
-		expenseType: undefined,
-		money: 0,
+		expenseType: ExpenseTypeEnum.PRIMARY,
+		subtype: '',
+		amount: 0,
 	})
 
 	const handleChange = (e: ChangeEvent<{ name?: string; value: unknown }>) => {
@@ -38,7 +46,10 @@ const AddMovement: FC<Props> = ({ open, handleClose, handleSubmit }) => {
 		} = e
 
 		if (name) {
-			setMovement({ ...movement, [name]: value })
+			setMovement(state => ({ ...state, [name]: value }))
+			if (name === 'type' || name === 'expenseType') {
+				setMovement(state => ({ ...state, subtype: '' }))
+			}
 		}
 	}
 
@@ -83,10 +94,31 @@ const AddMovement: FC<Props> = ({ open, handleClose, handleSubmit }) => {
 					)}
 					<Box mt={2}>
 						<FormControl variant='outlined' fullWidth>
+							<Autocomplete
+								freeSolo
+								options={
+									movement.type === MovementTypeEnum.INCOME
+										? subtypesIncome
+										: subtypesExpense
+								}
+								renderInput={params => (
+									<TextField
+										{...params}
+										label='Subtipo'
+										name='subtype'
+										variant='outlined'
+										fullWidth
+									/>
+								)}
+							/>
+						</FormControl>
+					</Box>
+					<Box mt={2}>
+						<FormControl variant='outlined' fullWidth>
 							<InputLabel>Cantidad</InputLabel>
 							<OutlinedInput
-								name='money'
-								value={movement.money}
+								name='amount'
+								value={movement.amount}
 								type='number'
 								onChange={handleChange}
 								endAdornment={<InputAdornment position='end'>€</InputAdornment>}

@@ -1,11 +1,12 @@
 import { ChangeEvent, FC, FormEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { TextField, Typography, Box, Button, Icon } from '@material-ui/core'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import 'font-awesome/css/font-awesome.css'
 
 import * as ActionsFactory from './../../store/actionsFactory'
+import * as AuthService from './../../services/authService'
 import * as Routes from './../../models/constants/routes'
 import { LoginDto } from '../../models/interfaces/auth'
 
@@ -19,6 +20,7 @@ const SeparatorStyled = styled.span`
 
 const Login: FC = () => {
 	const dispatch = useDispatch()
+	const history = useHistory()
 
 	const [login, setLogin] = useState<LoginDto>({ email: '', password: '' })
 
@@ -33,14 +35,37 @@ const Login: FC = () => {
 		})
 	}
 
-	const handleSubmit = (e: FormEvent) => {
-		e.preventDefault()
+	const handleSubmit = async (e: FormEvent) => {
+		try {
+			e.preventDefault()
+			const userLogged = await AuthService.login(login)
 
-		dispatch(ActionsFactory.login(login))
+			if (userLogged) {
+				dispatch(ActionsFactory.login(userLogged))
+				history.replace(Routes.ROOT)
+			}
+		} catch (error) {
+			console.log(
+				'🚀 ~ file: Login.tsx ~ line 49 ~ handleClickGoogle ~ error',
+				error
+			)
+		}
 	}
 
-	const handleClickGoogle = () => {
-		dispatch(ActionsFactory.signInWithGoogle())
+	const handleClickGoogle = async () => {
+		try {
+			const userLogged = await AuthService.signInWithGoogle()
+
+			if (userLogged) {
+				dispatch(ActionsFactory.login(userLogged))
+				history.replace(Routes.ROOT)
+			}
+		} catch (error) {
+			console.log(
+				'🚀 ~ file: Login.tsx ~ line 49 ~ handleClickGoogle ~ error',
+				error
+			)
+		}
 	}
 
 	return (

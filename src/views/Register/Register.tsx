@@ -1,11 +1,12 @@
 import { ChangeEvent, FC, FormEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { TextField, Typography, Box, Button, Icon } from '@material-ui/core'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import 'font-awesome/css/font-awesome.css'
 
 import * as ActionsFactory from './../../store/actionsFactory'
+import * as AuthService from './../../services/authService'
 import * as Routes from './../../models/constants/routes'
 import { RegisterDto } from '../../models/interfaces/auth'
 
@@ -19,6 +20,7 @@ const SeparatorStyled = styled.span`
 
 const Register: FC = () => {
 	const dispatch = useDispatch()
+	const history = useHistory()
 
 	const [register, setRegister] = useState<RegisterDto>({
 		displayName: '',
@@ -38,18 +40,42 @@ const Register: FC = () => {
 		})
 	}
 
-	const handleSubmit = (e: FormEvent) => {
-		e.preventDefault()
+	const handleSubmit = async (e: FormEvent) => {
+		try {
+			e.preventDefault()
 
-		if (register.password === register.repeatPassword) {
-			dispatch(ActionsFactory.register(register))
-		} else {
-			alert('Las contraseñas no coinciden')
+			if (register.password === register.repeatPassword) {
+				const userLogged = await AuthService.register(register)
+
+				if (userLogged) {
+					dispatch(ActionsFactory.register(userLogged))
+					history.replace(Routes.ROOT)
+				}
+			} else {
+				alert('Las contraseñas no coinciden')
+			}
+		} catch (error) {
+			console.log(
+				'🚀 ~ file: Register.tsx ~ line 67 ~ handleSubmit ~ error',
+				error
+			)
 		}
 	}
 
-	const handleClickGoogle = () => {
-		dispatch(ActionsFactory.signInWithGoogle())
+	const handleClickGoogle = async () => {
+		try {
+			const userLogged = await AuthService.signInWithGoogle()
+
+			if (userLogged) {
+				dispatch(ActionsFactory.login(userLogged))
+				history.replace(Routes.ROOT)
+			}
+		} catch (error) {
+			console.log(
+				'🚀 ~ file: Login.tsx ~ line 49 ~ handleClickGoogle ~ error',
+				error
+			)
+		}
 	}
 
 	return (

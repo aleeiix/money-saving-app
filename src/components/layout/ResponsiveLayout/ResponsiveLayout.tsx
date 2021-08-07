@@ -5,7 +5,12 @@ import styled from 'styled-components'
 const maxWidth = 500
 
 const CardStyled = styled(Card)`
+	position: relative;
 	width: ${maxWidth}px;
+`
+
+const CardContentStyled = styled(CardContent)`
+	height: 100%;
 `
 
 const ResponsiveLayout: FC = ({ children }) => {
@@ -25,13 +30,13 @@ const ResponsiveLayout: FC = ({ children }) => {
 	}, [])
 
 	return (
-		<Box component='main' m={2}>
+		<Box component='main' p={2} height='100vh'>
 			{width <= maxWidth ? (
 				children
 			) : (
-				<Box display='flex' justifyContent='center'>
+				<Box display='flex' justifyContent='center' height='100%'>
 					<CardStyled>
-						<CardContent>{children}</CardContent>
+						<CardContentStyled>{children}</CardContentStyled>
 					</CardStyled>
 				</Box>
 			)}

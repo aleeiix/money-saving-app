@@ -1,41 +1,45 @@
 import { FC } from 'react'
-import { Router, Switch, Redirect } from 'react-router-dom'
+import { BrowserRouter, Switch } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 import * as Routes from '../../../models/constants/routes'
 
 import Home from '../../../views/Home/Home'
 import Login from '../../../views/Login/Login'
 import Register from '../../../views/Register/Register'
-
-import history from '../../../utils/history'
-import GuardedRoute from '../GuardedRoute/GuardedRoute'
-import { isLogged, isNotLogged } from '../../../services/guards'
+import GuardRoute from '../GuardRoute/GuardRoute'
+import LoggedLayout from '../../layout/LoggedLayout/LoggedLayout'
+import { isLogged } from '../../../services/guards'
+import { State } from '../../../models/interfaces/state'
 
 const Routing: FC = () => {
+	const userLogged = useSelector(({ userLogged }: State) => userLogged)
+
 	return (
-		<Router history={history}>
+		<BrowserRouter>
 			<Switch>
-				<Redirect path={Routes.ROOT} to={Routes.HOME} exact />
-				<GuardedRoute
+				<GuardRoute
 					path={Routes.LOGIN}
 					component={Login}
 					redirect={Routes.ROOT}
-					guard={isNotLogged}
+					guard={() => !isLogged(userLogged)}
 				/>
-				<GuardedRoute
+				<GuardRoute
 					path={Routes.REGISTER}
 					component={Register}
 					redirect={Routes.ROOT}
-					guard={isNotLogged}
+					guard={() => !isLogged(userLogged)}
 				/>
-				<GuardedRoute
-					path={Routes.HOME}
+				<GuardRoute
+					path={Routes.ROOT}
+					layout={LoggedLayout}
 					component={Home}
 					redirect={Routes.LOGIN}
-					guard={isLogged}
+					guard={() => isLogged(userLogged)}
+					exact={true}
 				/>
 			</Switch>
-		</Router>
+		</BrowserRouter>
 	)
 }
 

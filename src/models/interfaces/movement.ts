@@ -10,15 +10,17 @@ export enum ExpenseTypeEnum {
 }
 
 export interface NewMovementDto {
-	money: number
 	type: MovementTypeEnum
 	expenseType?: ExpenseTypeEnum
+	subtype: string
+	amount: number
 }
 
 export interface MovementDto {
 	id: string
-	money: number
 	type: MovementTypeEnum
 	expenseType?: ExpenseTypeEnum
+	subtype: string
+	amount: number
 	date: Date
 }

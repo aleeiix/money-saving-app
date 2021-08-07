@@ -88,3 +88,21 @@ export const signInWithGoogle = async (): Promise<UserDto | undefined> => {
 		}
 	}
 }
+
+export const userIsLogged = (): Promise<UserDto | undefined> => {
+	return new Promise(resolve => {
+		const unsubscribe = auth.onAuthStateChanged(async user => {
+			if (user) {
+				const userLogged = await getUserById(user.uid)
+				resolve(userLogged)
+			} else {
+				resolve(undefined)
+			}
+			unsubscribe()
+		})
+	})
+}
+
+export const logout = async (): Promise<void> => {
+	return auth.signOut()
+}

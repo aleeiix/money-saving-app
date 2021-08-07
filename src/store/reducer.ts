@@ -14,6 +14,9 @@ const reducer: Reducer = (state = initialState, action: AnyAction) => {
 		case ActionTypes.REGISTER:
 			return { ...state, userLogged: action.payload }
 
+		case ActionTypes.LOGOUT:
+			return { ...state, userLogged: undefined }
+
 		case ActionTypes.GET_MOVEMENTS_MONTH:
 			return { ...state, movementsMonth: action.payload }
 

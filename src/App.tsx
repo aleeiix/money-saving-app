@@ -1,23 +1,39 @@
-import * as React from 'react'
-import { Provider } from 'react-redux'
-import CssBaseline from '@material-ui/core/CssBaseline'
+import { ReactElement, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import Routing from './components/routing/Routing/Routing'
 import ResponsiveLayout from './components/layout/ResponsiveLayout/ResponsiveLayout'
 
-import store from './store/store'
+import * as ActionsFactory from './store/actionsFactory'
+import * as AuthService from './services/authService'
 
-import './services/firebase'
+function App(): ReactElement {
+	const dispatch = useDispatch()
+	const [isLoaded, setIsLoaded] = useState(false)
 
-function App(): React.ReactElement {
+	useEffect(() => {
+		userIsLogged()
+	}, [])
+
+	const userIsLogged = async () => {
+		try {
+			const userLogged = await AuthService.userIsLogged()
+
+			if (userLogged) {
+				dispatch(ActionsFactory.login(userLogged))
+			}
+
+			setIsLoaded(true)
+		} catch (error) {}
+	}
+
 	return (
 		<>
-			<Provider store={store}>
+			{isLoaded && (
 				<ResponsiveLayout>
 					<Routing />
 				</ResponsiveLayout>
-				<CssBaseline />
-			</Provider>
+			)}
 		</>
 	)
 }

@@ -30,7 +30,7 @@ const PaperStyled = styled(Paper)`
 
 const CardMovement: FC<Props> = ({ movement }) => {
 	return (
-		<Box component={Card} mb={0.8}>
+		<Box component={Card} mb={1} boxShadow={3}>
 			<CardContentStyled
 				income={String(movement.type === MovementTypeEnum.INCOME)}
 			>
@@ -44,8 +44,8 @@ const CardMovement: FC<Props> = ({ movement }) => {
 
 				<Typography>
 					{movement.type === MovementTypeEnum.INCOME
-						? `Has ganado ${movement.money}€`
-						: `Has gastado ${movement.money}€`}
+						? `Has ganado ${movement.amount}€`
+						: `Has gastado ${movement.amount}€`}
 				</Typography>
 			</CardContentStyled>
 		</Box>

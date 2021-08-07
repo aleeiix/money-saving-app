@@ -21,13 +21,15 @@ export const addMovement = async (
 		.add({ ...movement, date: new Date() })
 
 	const newMovement = await newMovementDoc.get()
-	const { type, expenseType, money, date } = newMovement.data() as MovementDto
+	const { type, expenseType, subtype, amount, date } =
+		newMovement.data() as MovementDto
 
 	return {
 		id: newMovement.id,
 		type,
 		expenseType,
-		money,
+		subtype,
+		amount,
 		date,
 	}
 }
@@ -49,13 +51,14 @@ export const getMovementsMonth = async (
 		.get()
 
 	return movementsDocs.docs.map(doc => {
-		const { money, type, expenseType, date } = doc.data() as MovementDto
+		const { amount, type, expenseType, subtype, date } = doc.data() as MovementDto
 
 		return {
 			id: doc.id,
-			money,
 			type,
 			expenseType,
+			subtype,
+			amount,
 			date,
 		}
 	})

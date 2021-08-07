@@ -22,20 +22,20 @@ const ResumeMovements: FC<Props> = ({ movements }) => {
 
 		movements?.forEach(movement => {
 			if (movement.type === MovementTypeEnum.INCOME) {
-				income += Number(movement.money)
+				income += Number(movement.amount)
 			} else {
 				if (movement.expenseType === ExpenseTypeEnum.PRIMARY) {
-					expensesPrimary += Number(movement.money)
+					expensesPrimary += Number(movement.amount)
 				} else {
-					expensesWhim += Number(movement.money)
+					expensesWhim += Number(movement.amount)
 				}
 			}
 		})
 
-		setPrimaryExpense((100 * Number(expensesPrimary)) / Number(income))
-		setWhimExpense((100 * Number(expensesWhim)) / Number(income))
+		setPrimaryExpense((100 * Number(expensesPrimary)) / Number(income) || 0)
+		setWhimExpense((100 * Number(expensesWhim)) / Number(income) || 0)
 		setSaving(
-			100 - (100 * Number(expensesPrimary + expensesWhim)) / Number(income)
+			100 - (100 * Number(expensesPrimary + expensesWhim)) / Number(income) || 0
 		)
 	}, [movements])
 
