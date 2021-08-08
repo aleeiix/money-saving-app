@@ -21,6 +21,7 @@ const BottomNavigationStyled = styled(BottomNavigation)`
 	bottom: 0;
 	left: 0;
 	width: 100%;
+	box-shadow: rgb(0 0 0 / 20%) 0px -3px 2px -2px;
 `
 
 const LoggedLayout: FC = ({ children }) => {

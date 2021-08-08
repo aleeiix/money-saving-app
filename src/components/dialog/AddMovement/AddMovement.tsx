@@ -14,7 +14,6 @@ import {
 	Box,
 	TextField,
 } from '@material-ui/core'
-import Autocomplete from '@material-ui/lab/Autocomplete'
 
 import {
 	ExpenseTypeEnum,
@@ -37,8 +36,20 @@ const AddMovement: FC<Props> = ({ open, handleClose, handleSubmit }) => {
 		type: MovementTypeEnum.INCOME,
 		expenseType: ExpenseTypeEnum.PRIMARY,
 		subtype: '',
+		description: '',
 		amount: 0,
 	})
+
+	const handleCloseEmit = () => {
+		setMovement({
+			type: MovementTypeEnum.INCOME,
+			expenseType: ExpenseTypeEnum.PRIMARY,
+			subtype: '',
+			description: '',
+			amount: 0,
+		})
+		handleClose()
+	}
 
 	const handleChange = (e: ChangeEvent<{ name?: string; value: unknown }>) => {
 		const {
@@ -54,22 +65,31 @@ const AddMovement: FC<Props> = ({ open, handleClose, handleSubmit }) => {
 	}
 
 	const handleSubmitEvent = () => {
-		handleSubmit(movement)
+		if (isValid()) {
+			handleSubmit(movement)
+		}
+	}
+
+	const isValid = () => {
+		const { type, expenseType, subtype, amount } = movement
+		return type === MovementTypeEnum.EXPENSE
+			? type && subtype && amount
+			: type && expenseType && subtype && amount
 	}
 
 	return (
-		<Dialog open={open} onClose={handleClose}>
+		<Dialog open={open} onClose={handleCloseEmit}>
 			<DialogTitle>Añadir movimiento</DialogTitle>
 			<DialogContent dividers>
 				<form>
 					<Box>
 						<FormControl variant='outlined' fullWidth>
-							<InputLabel>Tipo de movimiento</InputLabel>
+							<InputLabel>Tipo de movimiento*</InputLabel>
 							<Select
 								name='type'
 								value={movement.type}
 								onChange={handleChange}
-								label='Tipo de movimiento'
+								label='Tipo de movimiento*'
 							>
 								<MenuItem value={MovementTypeEnum.INCOME}>Ingreso</MenuItem>
 								<MenuItem value={MovementTypeEnum.EXPENSE}>Gasto</MenuItem>
@@ -79,12 +99,12 @@ const AddMovement: FC<Props> = ({ open, handleClose, handleSubmit }) => {
 					{movement.type === MovementTypeEnum.EXPENSE && (
 						<Box mt={2}>
 							<FormControl variant='outlined' fullWidth>
-								<InputLabel>Tipo de gasto</InputLabel>
+								<InputLabel>Tipo de gasto*</InputLabel>
 								<Select
 									name='expenseType'
 									value={movement.expenseType || ''}
 									onChange={handleChange}
-									label='Tipo de gasto'
+									label='Tipo de gasto*'
 								>
 									<MenuItem value={ExpenseTypeEnum.PRIMARY}>Primario</MenuItem>
 									<MenuItem value={ExpenseTypeEnum.WHIM}>Capricho</MenuItem>
@@ -94,42 +114,51 @@ const AddMovement: FC<Props> = ({ open, handleClose, handleSubmit }) => {
 					)}
 					<Box mt={2}>
 						<FormControl variant='outlined' fullWidth>
-							<Autocomplete
-								freeSolo
-								options={
-									movement.type === MovementTypeEnum.INCOME
-										? subtypesIncome
-										: subtypesExpense
-								}
-								renderInput={params => (
-									<TextField
-										{...params}
-										label='Subtipo'
-										name='subtype'
-										variant='outlined'
-										fullWidth
-									/>
-								)}
-							/>
+							<InputLabel>Subtipo*</InputLabel>
+							<Select
+								name='subtype'
+								value={movement.subtype || ''}
+								onChange={handleChange}
+								label='Subtipo*'
+							>
+								{(movement.type === MovementTypeEnum.INCOME
+									? subtypesIncome
+									: subtypesExpense
+								).map(subtype => (
+									<MenuItem key={subtype} value={subtype}>
+										{subtype}
+									</MenuItem>
+								))}
+							</Select>
 						</FormControl>
 					</Box>
 					<Box mt={2}>
+						<TextField
+							label='Descripcion'
+							name='description'
+							value={movement.description || ''}
+							onChange={handleChange}
+							variant='outlined'
+							fullWidth
+						/>
+					</Box>
+					<Box mt={2}>
 						<FormControl variant='outlined' fullWidth>
-							<InputLabel>Cantidad</InputLabel>
+							<InputLabel>Cantidad*</InputLabel>
 							<OutlinedInput
 								name='amount'
 								value={movement.amount}
 								type='number'
 								onChange={handleChange}
 								endAdornment={<InputAdornment position='end'>€</InputAdornment>}
-								label='Cantidad'
+								label='Cantidad*'
 							/>
 						</FormControl>
 					</Box>
 				</form>
 			</DialogContent>
 			<DialogActions>
-				<Button color='primary' onClick={handleSubmitEvent}>
+				<Button color='primary' onClick={handleSubmitEvent} disabled={!isValid()}>
 					Guardar
 				</Button>
 			</DialogActions>

@@ -13,6 +13,7 @@ export interface NewMovementDto {
 	type: MovementTypeEnum
 	expenseType?: ExpenseTypeEnum
 	subtype: string
+	description?: string
 	amount: number
 }
 
@@ -21,6 +22,7 @@ export interface MovementDto {
 	type: MovementTypeEnum
 	expenseType?: ExpenseTypeEnum
 	subtype: string
+	description?: string
 	amount: number
 	date: Date
 }

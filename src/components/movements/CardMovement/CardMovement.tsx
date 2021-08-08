@@ -1,4 +1,11 @@
-import { Box, Card, CardContent, Typography, Paper } from '@material-ui/core'
+import {
+	Box,
+	Card,
+	CardContent,
+	Typography,
+	Paper,
+	Chip,
+} from '@material-ui/core'
 import { FC } from 'react'
 import styled from 'styled-components'
 import {
@@ -15,6 +22,7 @@ interface Props {
 const CardContentStyled = styled(CardContent)<{ income: string }>`
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	border-left: 0.5rem solid;
 	border-left-color: ${props =>
 		props.income === 'true'
@@ -34,19 +42,33 @@ const CardMovement: FC<Props> = ({ movement }) => {
 			<CardContentStyled
 				income={String(movement.type === MovementTypeEnum.INCOME)}
 			>
-				<PaperStyled elevation={3}>
-					{movement.type === MovementTypeEnum.INCOME ? (
-						<EuroIcon />
-					) : (
-						<ReceiptIcon />
-					)}
-				</PaperStyled>
+				<Box display='flex' alignItems='center'>
+					<PaperStyled elevation={3}>
+						{movement.type === MovementTypeEnum.INCOME ? (
+							<EuroIcon />
+						) : (
+							<ReceiptIcon />
+						)}
+					</PaperStyled>
 
-				<Typography>
-					{movement.type === MovementTypeEnum.INCOME
-						? `Has ganado ${movement.amount}€`
-						: `Has gastado ${movement.amount}€`}
-				</Typography>
+					<Box>
+						<Typography>
+							{movement.type === MovementTypeEnum.INCOME
+								? `Has ganado ${movement.amount}€`
+								: `Has gastado ${movement.amount}€`}
+						</Typography>
+						<Typography variant='caption'>
+							<b>Desc:</b> {movement.description}
+						</Typography>
+					</Box>
+				</Box>
+
+				<Chip
+					variant='outlined'
+					size='small'
+					label={movement.subtype}
+					color='primary'
+				/>
 			</CardContentStyled>
 		</Box>
 	)
