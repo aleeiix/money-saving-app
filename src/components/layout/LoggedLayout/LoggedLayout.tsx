@@ -13,7 +13,7 @@ import * as ActionsFactory from '../../../store/actionsFactory'
 
 const LoggedLayoutContainer = styled.div`
 	height: 100%;
-	padding-bottom: 60px;
+	padding-bottom: 44px;
 `
 
 const LoggedLayoutChildren = styled.div`
