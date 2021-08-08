@@ -24,6 +24,12 @@ const FabStyled = styled(Fab)`
 	right: 1rem;
 `
 
+const MovementsScroll = styled.div<{ heightTop: number }>`
+	height: calc(100% - ${props => props.heightTop || 0}px);
+	overflow-y: auto;
+	padding: 1px;
+`
+
 const Home: FC = () => {
 	const dispatch = useDispatch()
 	const listMovementsRef = useRef<HTMLDivElement>(null)
@@ -106,10 +112,15 @@ const Home: FC = () => {
 					height: `calc(100% - ${listMovementsRef?.current?.offsetTop || 0}px)`,
 				}}
 			>
-				<Box mb={1}>
+				<Box pb={1}>
 					<Typography variant='h6'>Movimientos del mes</Typography>
 				</Box>
-				<div>
+				<MovementsScroll
+					heightTop={
+						(listMovementsRef?.current?.children?.item(0) as HTMLDivElement)
+							?.offsetHeight || 0
+					}
+				>
 					{movements?.length ? (
 						movements?.map(movement => (
 							<CardMovement key={movement.id} movement={movement} />
@@ -117,7 +128,7 @@ const Home: FC = () => {
 					) : (
 						<Typography align='center'>Aun no tienes movimientos</Typography>
 					)}
-				</div>
+				</MovementsScroll>
 			</div>
 
 			<FabStyled color='primary' onClick={handleOpenAddMovement}>
