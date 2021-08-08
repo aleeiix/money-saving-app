@@ -13,11 +13,21 @@ import * as ActionsFactory from '../../../store/actionsFactory'
 
 const LoggedLayoutContainer = styled.div`
 	height: 100%;
-	padding-bottom: 42px;
+	padding-bottom: 60px;
+`
+
+const LoggedLayoutChildren = styled.div`
+	height: 100%;
+	overflow: auto;
+	padding: 4px;
+
+	::-webkit-scrollbar {
+		display: none;
+	}
 `
 
 const BottomNavigationStyled = styled(BottomNavigation)`
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	left: 0;
 	width: 100%;
@@ -51,7 +61,7 @@ const LoggedLayout: FC = ({ children }) => {
 
 	return (
 		<LoggedLayoutContainer>
-			{children}
+			<LoggedLayoutChildren>{children}</LoggedLayoutChildren>
 			<BottomNavigationStyled
 				value={navigation}
 				onChange={handleChange}

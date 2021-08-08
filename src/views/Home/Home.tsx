@@ -14,20 +14,13 @@ import ResumeMovements from '../../components/movements/ResumeMovements/ResumeMo
 import * as MovementService from '../../services/movementService'
 
 const HomeStyled = styled.div`
-	position: relative;
-	height: 100%;
+	/* position: relative; */
 `
 
 const FabStyled = styled(Fab)`
-	position: absolute;
-	bottom: 1rem;
-	right: 1rem;
-`
-
-const MovementsScroll = styled.div<{ heightTop: number }>`
-	height: calc(100% - ${props => props.heightTop || 0}px);
-	overflow-y: auto;
-	padding: 1px;
+	position: fixed;
+	bottom: 3.8rem;
+	right: 0.8rem;
 `
 
 const Home: FC = () => {
@@ -115,12 +108,7 @@ const Home: FC = () => {
 				<Box pb={1}>
 					<Typography variant='h6'>Movimientos del mes</Typography>
 				</Box>
-				<MovementsScroll
-					heightTop={
-						(listMovementsRef?.current?.children?.item(0) as HTMLDivElement)
-							?.offsetHeight || 0
-					}
-				>
+				<div>
 					{movements?.length ? (
 						movements?.map(movement => (
 							<CardMovement key={movement.id} movement={movement} />
@@ -128,7 +116,7 @@ const Home: FC = () => {
 					) : (
 						<Typography align='center'>Aun no tienes movimientos</Typography>
 					)}
-				</MovementsScroll>
+				</div>
 			</div>
 
 			<FabStyled color='primary' onClick={handleOpenAddMovement}>
