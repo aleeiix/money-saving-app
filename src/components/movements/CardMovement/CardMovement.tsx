@@ -57,9 +57,11 @@ const CardMovement: FC<Props> = ({ movement }) => {
 								? `Has ganado ${movement.amount}€`
 								: `Has gastado ${movement.amount}€`}
 						</Typography>
-						<Typography variant='caption'>
-							<b>Desc:</b> {movement.description}
-						</Typography>
+						{movement.description && (
+							<Typography variant='caption' color='textSecondary'>
+								<b>Desc:</b> {movement.description}
+							</Typography>
+						)}
 					</Box>
 				</Box>
 
