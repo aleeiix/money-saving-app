@@ -133,7 +133,7 @@ const ResumeMovements: FC<Props> = ({ movements }) => {
 					<Card>
 						<CardContent>
 							<Typography variant='subtitle2' align='center'>
-								Primarios <small>(50%)</small>
+								Basicos <small>(50%)</small>
 							</Typography>
 							<TypographyNumber
 								align='center'
@@ -178,7 +178,7 @@ const ResumeMovements: FC<Props> = ({ movements }) => {
 					<Card>
 						<CardContent>
 							<Typography variant='subtitle2' align='center'>
-								Ahorros <small>(20%)</small>
+								Ahorro <small>(20%)</small>
 							</Typography>
 							<TypographyNumber
 								align='center'
